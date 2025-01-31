@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生字表 - 香港客家話</title>
+    <style>
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            font-size: 18px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #666;
+            color: white;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align:center;">生字表 - 香港客家話</h2>
+
+    <div class="controls">
+        <button onclick="startPlaylist()">▶ 播放全部</button>
+        <button onclick="pausePlaylist()">⏸ 暫停</button>
+        <button onclick="stopPlaylist()">⏹ 停止</button>
+    </div>
+
+    <table id="dictionaryTable">
+        <thead>
+            <tr>
+                <th>香港客家話</th>
+                <th>拼音</th>
+                <th>漢語解釋</th>
+                <th>發音</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        let wordList = [];
+        let currentIndex = 0;
+        let audioElement = new Audio();
+        let isPlaying = false;
+
+        // Load JSON Data
+        fetch("dictionary.json")
+            .then(response => response.json())
+            .then(data => {
+                let tableBody = document.querySelector("#dictionaryTable tbody");
+                wordList = data.map(entry => entry["拼音"]); // Store pinyin for playlist
+                
+                data.forEach(entry => {
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${entry["香港客家話"]}</td>
+                        <td>${entry["拼音"]}</td>
+                        <td>${entry["漢語解釋"]}</td>
+                        <td><button onclick="playAudio('${entry["拼音"]}')">播放</button></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error("Error loading JSON:", error));
+
+        function playAudio(pinyin) {
+            audioElement.src = `audio/${pinyin}.mp3`;
+            audioElement.play();
+        }
+
+        function startPlaylist() {
+            if (!isPlaying) {
+                isPlaying = true;
+                playNext();
+            }
+        }
+
+        function playNext() {
+            if (currentIndex < wordList.length && isPlaying) {
+                let pinyin = wordList[currentIndex];
+                audioElement.src = `audio/${pinyin}.mp3`;
+                audioElement.play();
+                currentIndex++;
+
+                audioElement.onended = () => {
+                    playNext(); // Play next word when current one finishes
+                };
+            } else {
+                isPlaying = false; // Stop if reached end of list
+            }
+        }
+
+        function pausePlaylist() {
+            isPlaying = false;
+            audioElement.pause();
+        }
+
+        function stopPlaylist() {
+            isPlaying = false;
+            audioElement.pause();
+            currentIndex = 0; // Reset playlist
+        }
+    </script>
+
+</body>
+</html>

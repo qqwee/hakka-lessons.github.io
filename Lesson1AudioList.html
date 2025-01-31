@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生字表 - 香港客家話</title>
+    <style>
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            font-size: 18px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #666;
+            color: white;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align:center;">生字表 - 香港客家話</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>香港客家話</th>
+                <th>拼音</th>
+                <th>漢語解釋</th>
+                <th>發音</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>厓</td>
+                <td>ngai2</td>
+                <td>(我)</td>
+                <td><button onclick="playAudio('audio1 ngai2 厓 (我)')">播放</button></td>
+            </tr>
+            <tr>
+                <td>你</td>
+                <td>ngi2</td>
+                <td>(你)</td>
+                <td><button onclick="playAudio('audio2 ngi2你(你)')">播放</button></td>
+            </tr>
+            <tr>
+                <td>佢</td>
+                <td>gi2</td>
+                <td>(他, 她, 它)</td>
+                <td><button onclick="playAudio('audio3 gi2佢(他, 她, 它)')">播放</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function playAudio(pinyin) {
+            let audio = new Audio(pinyin + ".mp3"); // Ensure your MP3 files are named correctly
+            audio.play();
+        }
+    </script>
+
+</body>
+</html>
